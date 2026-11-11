@@ -35,5 +35,5 @@ sudo systemctl enable --now fabric-pgdump.timer >/dev/null 2>&1
 sudo systemctl start fabric-pgdump.service
 sudo journalctl -u fabric-pgdump.service -n 3 --no-pager | tail -2
 sudo ls -l /var/backups/fabric
-sudo docker run --rm -v /var/backups/fabric:/b:ro postgres:16 pg_restore --list /b/synapse-$(date -u +%Y%m%d).dump | grep -c "TABLE DATA" | sed 's/^/tables in dump: /'
+sudo docker run --rm -v /var/backups/fabric:/b:ro postgres:16 pg_restore --list "/b/synapse-$(date -u +%Y%m%d).dump" | grep -c "TABLE DATA" | sed 's/^/tables in dump: /'
 systemctl list-timers fabric-pgdump.timer --no-pager | sed -n 2p
