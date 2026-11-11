@@ -1,0 +1,29 @@
+name: check
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  lint:
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: shellcheck -S warning scripts/*.sh
+      - name: compose file is valid
+        run: POSTGRES_PASSWORD=ci docker compose -f server/docker-compose.yml config --quiet
+  live:
+    # Checks the live server from GitHub's network (outside Russia). Manual only.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/check.sh

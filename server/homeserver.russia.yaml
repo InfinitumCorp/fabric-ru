@@ -1,0 +1,8 @@
+# Infinitum Fabric (Russia): closed, no federation.
+# Appended once to the generated /opt/fabric/data/homeserver.yaml by scripts/setup-server.sh.
+enable_registration: false
+federation_domain_whitelist: []
+allow_public_rooms_over_federation: false
+allow_public_rooms_without_auth: false
+trusted_key_servers: []
+suppress_key_server_warning: true

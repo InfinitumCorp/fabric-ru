@@ -1,0 +1,5 @@
+.env
+server/.env
+server/data/
+server/pgdata/
+*.dump
