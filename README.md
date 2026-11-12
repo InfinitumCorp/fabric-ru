@@ -47,4 +47,6 @@ None are in this repo (it is public). The DB password lives only in `/opt/fabric
 
 Fabric signs people in with Cumulus ID (id.cumuluscloud.app), which loads from inside Yandex Cloud without a VPN. Consumer ISPs in Russia are not yet tested.
 
+The homeserver itself signs people in with Cumulus://ID only (`server/homeserver.cumulus-id.yaml`, appended by `setup-server.sh`): Synapse's OIDC provider against `https://id.cumuluscloud.app/realms/cumulus` as the public client `fabric` (no secret, PKCE S256), with password sign-in off. Clients see the `m.login.sso` flow; the callback is `https://ru.infinitumfabric.app/_synapse/client/oidc/callback`, served through the existing `/_synapse/client` route. A Matrix user's localpart is their Cumulus ID username. An account that was created with a password before this change cannot sign in until it is linked (`allow_existing_users` stays off so a username alone never takes over an account).
+
 Server inventory, costs and the firewall: `infra/yandex-cloud.md` in InfinitumCorp/infinitum-revenue.
