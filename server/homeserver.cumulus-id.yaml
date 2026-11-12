@@ -1,0 +1,26 @@
+
+# Infinitum Fabric (Russia): sign-in is Cumulus://ID only (//RULES// section 10).
+# Appended once to /opt/fabric/data/homeserver.yaml by scripts/setup-server.sh.
+# Public OIDC client "fabric": no client secret, every code exchange bound by PKCE S256.
+# The redirect is https://ru.infinitumfabric.app/_synapse/client/oidc/callback, so the origin
+# https://ru.infinitumfabric.app must be registered for "fabric" in InfinitumCorp/cumulus-id
+# src/clients.ts.
+password_config:
+  enabled: false
+oidc_providers:
+  - idp_id: cumulus
+    idp_name: "Cumulus://ID"
+    discover: true
+    issuer: "https://id.cumuluscloud.app/realms/cumulus"
+    client_id: "fabric"
+    client_auth_method: none
+    pkce_method: always
+    scopes: ["openid", "profile", "email"]
+    user_profile_method: auto
+    allow_existing_users: false
+    user_mapping_provider:
+      config:
+        subject_claim: "sub"
+        localpart_template: "{{ user.preferred_username }}"
+        display_name_template: "{{ user.name }}"
+        email_template: "{{ user.email }}"

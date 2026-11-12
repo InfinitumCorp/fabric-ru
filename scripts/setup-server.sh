@@ -44,6 +44,11 @@ fi
 if ! grep -q "Infinitum Fabric (Russia)" data/homeserver.yaml; then
   cat "$HERE/server/homeserver.russia.yaml" >> data/homeserver.yaml
 fi
+# Cumulus://ID sign-in (OIDC, public client, PKCE); turns password sign-in off. Separate marker so
+# a server set up before this change gets it on the next run.
+if ! grep -q "sign-in is Cumulus://ID only" data/homeserver.yaml; then
+  cat "$HERE/server/homeserver.cumulus-id.yaml" >> data/homeserver.yaml
+fi
 
 docker compose up -d --quiet-pull
 for _ in $(seq 1 60); do curl -fsS http://127.0.0.1:8008/health >/dev/null 2>&1 && break; sleep 2; done
